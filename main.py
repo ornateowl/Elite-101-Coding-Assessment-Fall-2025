@@ -1,15 +1,29 @@
 from library_books import library_books
 from datetime import datetime, timedelta
 
+#starter data
+
+
 # -------- Level 1 --------
 # TODO: Create a function to view all books that are currently available
 # Output should include book ID, title, and author
+def view_available_books():
+    for book in library_books:
+        if book['available']:
+            print(book['id'],book['title'], book['author'])
 
 
 # -------- Level 2 --------
 # TODO: Create a function to search books by author OR genre
 # Search should be case-insensitive
 # Return a list of matching books
+def search_books(input):
+    books_list = []
+    for book in library_books:
+        if (book['author'].lower()) == input.lower() or (book['genre'].lower()) == input.lower():
+            books_list.append(book)
+    return books_list
+            
 
 
 # -------- Level 3 --------
@@ -20,6 +34,18 @@ from datetime import datetime, timedelta
 #   - Increment the checkouts counter
 # If it is not available:
 #   - Print a message saying it's already checked out
+def checkout_by_id(id_num):
+    for book in library_books:
+        if book['id'].lower() == id_num.lower(): # if it is, check the id case insensitively
+            if book['available']: #check that the book is available
+                book['available'] = False #make it unavailable 
+                now = datetime.now() #define the time right now
+                due_date = now + timedelta(days=14)
+                #book('checkouts') +=1
+            else:
+                print("This book is already checked out!")
+checkout_by_id('b7')
+                
 
 
 # -------- Level 4 --------
@@ -44,4 +70,6 @@ from datetime import datetime, timedelta
 
 if __name__ == "__main__":
     # You can use this space to test your functions
+    # view_available_books()
+    print(search_books("RiCk RiOrDaN"))
     pass
