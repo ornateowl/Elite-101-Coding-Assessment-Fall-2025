@@ -41,19 +41,30 @@ def checkout_by_id(id_num):
                 book['available'] = False #make it unavailable 
                 now = datetime.now() #define the time right now
                 due_date = now + timedelta(days=14)
-                #book('checkouts') +=1
+                book['checkouts'] +=1
             else:
                 print("This book is already checked out!")
-checkout_by_id('b7')
+
                 
 
 
 # -------- Level 4 --------
 # TODO: Create a function to return a book by ID
 # Set its availability to True and clear the due_date
+def return_by_id(book_id):
+    for book in library_books:
+        if book['id'].lower() == book_id.lower():
+            book['available'] = True
+            due_date = datetime.none()
 
 # TODO: Create a function to list all overdue books
 # A book is overdue if its due_date is before today AND it is still checked out
+def check_overdue():
+    overdue_list = []
+    for book in library_books:
+        if book['available'] == False:
+            if datetime.now() > due_date:
+                overdue_list.append(book)
 
 
 # -------- Level 5 --------
@@ -71,5 +82,6 @@ checkout_by_id('b7')
 if __name__ == "__main__":
     # You can use this space to test your functions
     # view_available_books()
-    print(search_books("RiCk RiOrDaN"))
-    pass
+   #print(search_books("RiCk RiOrDaN"))
+   print(checkout_by_id("B7"))
+    #pass
