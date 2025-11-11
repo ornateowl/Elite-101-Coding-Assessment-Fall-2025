@@ -119,17 +119,17 @@ class Book:
 if __name__ == "__main__":
     # You can use this space to test your functions
     # view_available_books()
-   #print(search_books("RiCk RiOrDaN"))
+    #print(search_books("RiCk RiOrDaN"))
    
-   b1 = Book("B1", "The Lightning Thief", "Rick Riordan", "Fantasy", True, None, 2)
-   b2 = Book("B2", "To Kill a Mockingbird", "Harper Lee", "Historical", False, "2025-11-01", 5)
-   b3 = Book("B3", "The Great Gatsby", "F. Scott Fitzgerald", "Classic", True, None, 3)
-   b4 = Book("B4", "1984", "George Orwell", "Dystopian", True, None, 4)
-   b5 = Book("B5", "Pride and Prejudice", "Jane Austen", "Romance", True, None, 6)
-   b6 = Book("B6", "The Hobbit", "J.R.R. Tolkien", "Fantasy", False, "2025-11-10", 8)
-   b7 = Book("B7", "Fahrenheit 451", "Ray Bradbury", "Science Fiction", True, None, 1)
-   b8 = Book("B8", "The Catcher in the Rye", "J.D. Salinger", "Coming-Of-Age", False, "2025-11-12", 3)
-   library_list = [b1,b2,b3,b4,b5,b6,b7,b8]
+    b1 = Book("B1", "The Lightning Thief", "Rick Riordan", "Fantasy", True, None, 2)
+    b2 = Book("B2", "To Kill a Mockingbird", "Harper Lee", "Historical", False, "2025-11-01", 5)
+    b3 = Book("B3", "The Great Gatsby", "F. Scott Fitzgerald", "Classic", True, None, 3)
+    b4 = Book("B4", "1984", "George Orwell", "Dystopian", True, None, 4)
+    b5 = Book("B5", "Pride and Prejudice", "Jane Austen", "Romance", True, None, 6)
+    b6 = Book("B6", "The Hobbit", "J.R.R. Tolkien", "Fantasy", False, "2025-11-10", 8)
+    b7 = Book("B7", "Fahrenheit 451", "Ray Bradbury", "Science Fiction", True, None, 1)
+    b8 = Book("B8", "The Catcher in the Rye", "J.D. Salinger", "Coming-Of-Age", False, "2025-11-12", 3)
+    library_list = [b1,b2,b3,b4,b5,b6,b7,b8]
    
     print("Menu")
     print("1. View books")
@@ -138,12 +138,12 @@ if __name__ == "__main__":
     print("4. Return book")
     choice = input("Please choose the number corresponding to your choice above: ")
     if choice == str(1):
-        view_available()
+        Book.view_available()
     if choice == str(2):
-        search_by_id()
+        Book.search_by_id()
     if choice == str(3):
-        checkout()
+        Book.checkout()
     if choice == str(4):
-        return_book()
-   print(checkout_by_id("B7"))
+        Book.return_book()
+    print(checkout_by_id("B7"))
     #pass
