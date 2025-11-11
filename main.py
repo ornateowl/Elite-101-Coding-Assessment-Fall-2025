@@ -130,7 +130,7 @@ class Book:
     def view_overdue(library_list):
         overdue_books = []
         for book in library_list:
-            if book.available == False:
+            if not book.due_date == None:
                 if str(datetime.now().date()) > book.due_date:
                     overdue_books.append(book.title)
         print(f"These books are overdue: {overdue_books}")
@@ -164,11 +164,12 @@ class Book:
 
 if __name__ == "__main__":
     # You can use this space to test your functions
+    # Below is where I was testing my functions
     # view_available_books()
-    print(search_books("RiCk RiOrDaN"))
-    print(checkout_by_id("B7"))
-    print(return_by_id("B11"))
-    check_overdue()
+    #print(search_books("RiCk RiOrDaN"))
+    #print(checkout_by_id("B7"))
+    #print(return_by_id("B11"))
+    #check_overdue()
    
     b1 = Book("B1", "The Lightning Thief", "Rick Riordan", "Fantasy", True, None, 2)
     b2 = Book("B2", "To Kill a Mockingbird", "Harper Lee", "Historical", False, "2025-11-01", 5)
