@@ -21,7 +21,7 @@ def search_books(num_id):
     books_list = []
     for book in library_books:
         if (book['author'].lower()) == num_id.lower() or (book['genre'].lower()) == num_id.lower():
-            books_list.append(book)
+            books_list.append(book['title'])
     return books_list
             
 
@@ -40,8 +40,10 @@ def checkout_by_id(id_num):
             if book['available']: #check that the book is available
                 book['available'] = False #make it unavailable 
                 now = datetime.now() #define the time right now
-                due_date = now + timedelta(days=14)
+                due_date = str((now + timedelta(days=14)).date())
+                book['due_date'] = due_date
                 book['checkouts'] +=1
+                print("Your book " + book['title'] + " is due on " + due_date)
             else:
                 print("This book is already checked out!")
 
@@ -52,10 +54,15 @@ def checkout_by_id(id_num):
 # TODO: Create a function to return a book by ID
 # Set its availability to True and clear the due_date
 def return_by_id(book_id):
+    found = False
     for book in library_books:
         if book['id'].lower() == book_id.lower():
             book['available'] = True
-            due_date = datetime.none()
+            book['due_date'] = None
+            print("Thank you for returning your book!")
+            found = True
+    if found == False:
+        print("ID is invalid. Please enter a valid ID. ")
 
 # TODO: Create a function to list all overdue books
 # A book is overdue if its due_date is before today AND it is still checked out
@@ -63,16 +70,16 @@ def check_overdue():
     overdue_list = []
     for book in library_books:
         if book['available'] == False:
-            if datetime.now() > due_date:
-                overdue_list.append(book)
-
+            if str(datetime.now().date()) > book['due_date']:
+                overdue_list.append(book['title'])
+    print(f"These books are overdue: {overdue_list}")
 
 # -------- Level 5 --------
 # TODO: Convert your data into a Book class with methods like checkout() and return_book()
 # TODO: Add a simple menu that allows the user to choose different options like view, search, checkout, return, etc.
 class Book:
-    def __init__(self, id_num, title, author, genre, available, due_date, checkouts):
-        self.id_num = id_num
+    def __init__(self, id, title, author, genre, available, due_date, checkouts):
+        self.id = id
         self.title = title
         self.author = author
         self.genre = genre
@@ -80,31 +87,70 @@ class Book:
         self.due_date = due_date
         self.checkouts = checkouts
 
-    def checkout(id_num):
+    def checkout(id, library_list):
         for book in library_list:
-            if book.id.lower() == id_num.lower(): # if it is, check the id case insensitively
+            if book.id.lower() == id.lower(): # if it is, check the id case insensitively
                 if book.available: #check that the book is available
                     book.available = False #make it unavailable 
                     now = datetime.now() #define the time right now
                     due_date = now + timedelta(days=14)
                     book.checkouts +=1
+                    print(f"Your book, {book.title}, has been successfully checked out!")
                 else:
                     print("This book is already checked out!")
         
-    def return_book(book_id):
+    def return_book(book_id, library_list):
+        found_book = False
         for book in library_list:
             if book.id.lower() == book_id.lower():
                 book.available = True
-                due_date = datetime.none()
-    def view_available():
+                book.due_date = None #set due date to None
+                print(f"Your book, {book.title}, has successfully been returned!")
+                found_book = True
+        if found_book == False:
+            print("We couldn't find a book that matches this ID. Please enter a valid ID. ")
+
+
+    def view_available(library_list):
         for book in library_list:
-            if book.available():
+            if book.available == True:
                 print(book.id,book.title, book.author)
-    def search_by_id(id_number):
+
+    def search_by_au_ge(id_number, library_list):
         available_list = []
         for book in library_list:
             if (book.author.lower()) == id_number.lower() or (book.genre.lower()) == id_number.lower():
-                available_list.append(book)
+                available_list.append(book.title)
+
+        if len(available_list) > 0:        
+            print(f"The books that match your search are : {available_list}")
+        else:
+            print("There are no available books with this ID/Author name")
+
+    def view_overdue(library_list):
+        overdue_books = []
+        for book in library_list:
+            if book.available == False:
+                if str(datetime.now().date()) > book.due_date:
+                    overdue_books.append(book.title)
+        print(f"These books are overdue: {overdue_books}")
+    
+    def view_top_three(library_list):
+        checkout_list = []
+        for book in library_list:
+            checkout_list.append(book.checkouts)
+        checkout_list.sort()
+
+        for book in library_list:
+            if book.checkouts == checkout_list[7]:
+                print(f"The most checked out book is {book.title}")
+            if book.checkouts == checkout_list[6]:
+                print(f"The second most checked out book is {book.title}")
+            if book.checkouts == checkout_list[5]:
+                print(f"The third most checked out book is {book.title}")
+
+                
+
 
 
 
@@ -119,7 +165,10 @@ class Book:
 if __name__ == "__main__":
     # You can use this space to test your functions
     # view_available_books()
-    #print(search_books("RiCk RiOrDaN"))
+    print(search_books("RiCk RiOrDaN"))
+    print(checkout_by_id("B7"))
+    print(return_by_id("B11"))
+    check_overdue()
    
     b1 = Book("B1", "The Lightning Thief", "Rick Riordan", "Fantasy", True, None, 2)
     b2 = Book("B2", "To Kill a Mockingbird", "Harper Lee", "Historical", False, "2025-11-01", 5)
@@ -131,19 +180,35 @@ if __name__ == "__main__":
     b8 = Book("B8", "The Catcher in the Rye", "J.D. Salinger", "Coming-Of-Age", False, "2025-11-12", 3)
     library_list = [b1,b2,b3,b4,b5,b6,b7,b8]
    
+
     print("Menu")
-    print("1. View books")
+    print("1. View Available books")
     print("2. Search books")
     print("3. Checkout book")
     print("4. Return book")
-    choice = input("Please choose the number corresponding to your choice above: ")
-    if choice == str(1):
-        Book.view_available()
-    if choice == str(2):
-        Book.search_by_id()
-    if choice == str(3):
-        Book.checkout()
-    if choice == str(4):
-        Book.return_book()
-    print(checkout_by_id("B7"))
-    #pass
+    print("5. View Overdue")
+    print("6. View 3 Most Checked Out books")
+    print("7. Exit")
+    run = True
+    while run:
+        print()
+        choice = input("Please choose the number corresponding to your choice above: ")
+        print()
+        if choice == str(1):
+            Book.view_available(library_list)
+        if choice == str(2):
+            choose_au_ge = input("Please enter the author or genre of the book you are searching for: ")
+            Book.search_by_au_ge(choose_au_ge, library_list)
+        if choice == str(3):
+            choose_id = input("Please enter the ID of the book you want to check out: ")
+            Book.checkout(choose_id, library_list)
+        if choice == str(4):
+            return_id = input("Please enter the ID of the book you want to return")
+            Book.return_book(return_id, library_list)
+        if choice == str(5):
+            Book.view_overdue(library_list)
+        if choice == str(6):
+            Book.view_top_three(library_list)
+        if choice == str(7):
+            run = False
+        #pass
